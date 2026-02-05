@@ -14,10 +14,10 @@ const ReservationForm = () => {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
   const { rooms } = useSelector((state) => state.rooms);
-  
+
   const queryParams = new URLSearchParams(location.search);
   const roomIdFromUrl = queryParams.get('roomId');
-  
+
   const [formData, setFormData] = useState({
     roomId: roomIdFromUrl || '',
     guestName: '',
@@ -28,7 +28,7 @@ const ReservationForm = () => {
     numberOfGuests: 1,
     specialRequests: ''
   });
-  
+
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -42,8 +42,8 @@ const ReservationForm = () => {
       const room = rooms.find(r => r.id === roomIdFromUrl);
       if (room) {
         setSelectedRoom(room);
-        setFormData(prev => ({ 
-          ...prev, 
+        setFormData(prev => ({
+          ...prev,
           roomId: roomIdFromUrl,
           numberOfGuests: Math.min(prev.numberOfGuests, room.capacity)
         }));
@@ -54,7 +54,7 @@ const ReservationForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     if (name === 'roomId') {
       const room = rooms.find(r => r.id === value);
       setSelectedRoom(room);
@@ -66,7 +66,7 @@ const ReservationForm = () => {
     const nights = Math.ceil((formData.checkOut - formData.checkIn) / (1000 * 60 * 60 * 24));
     return selectedRoom.price * (nights > 0 ? nights : 0);
   };
-  
+
   const nights = Math.ceil((formData.checkOut - formData.checkIn) / (1000 * 60 * 60 * 24));
 
   const handleSubmit = async (e) => {
@@ -121,12 +121,12 @@ const ReservationForm = () => {
         </div>
 
         <Row className="g-5">
-          <Col lg={7}>
+          <Col lg={7} className="order-2 order-lg-1">
             <div className="bg-surface p-4 p-md-5 border-0 shadow-sm rounded-0 animate-fade-in">
               <h4 className="fw-bold mb-4 d-flex align-items-center text-main">
                 Guest Information
               </h4>
-              
+
               {error && <Alert variant="danger" className="rounded-0 border-0 bg-danger bg-opacity-10 text-danger mb-4">{error}</Alert>}
 
               <Form onSubmit={handleSubmit}>
@@ -134,9 +134,9 @@ const ReservationForm = () => {
                 {!roomIdFromUrl && (
                   <Form.Group className="mb-4">
                     <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Select Room</Form.Label>
-                    <Form.Select 
-                      name="roomId" 
-                      value={formData.roomId} 
+                    <Form.Select
+                      name="roomId"
+                      value={formData.roomId}
                       onChange={handleChange}
                       className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
                       style={{ borderRadius: 0 }}
@@ -156,28 +156,28 @@ const ReservationForm = () => {
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Full Name</Form.Label>
-                      <Form.Control 
-                        type="text" 
-                        name="guestName" 
-                        value={formData.guestName} 
-                        onChange={handleChange} 
+                      <Form.Control
+                        type="text"
+                        name="guestName"
+                        value={formData.guestName}
+                        onChange={handleChange}
                         className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
                         style={{ borderRadius: 0 }}
-                        required 
+                        required
                       />
                     </Form.Group>
                   </Col>
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Phone Number</Form.Label>
-                      <Form.Control 
-                        type="tel" 
-                        name="guestPhone" 
-                        value={formData.guestPhone} 
-                        onChange={handleChange} 
+                      <Form.Control
+                        type="tel"
+                        name="guestPhone"
+                        value={formData.guestPhone}
+                        onChange={handleChange}
                         className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
                         style={{ borderRadius: 0 }}
-                        required 
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -185,14 +185,14 @@ const ReservationForm = () => {
 
                 <Form.Group className="mb-5">
                   <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Email Address</Form.Label>
-                  <Form.Control 
-                    type="email" 
-                    name="guestEmail" 
-                    value={formData.guestEmail} 
-                    onChange={handleChange} 
+                  <Form.Control
+                    type="email"
+                    name="guestEmail"
+                    value={formData.guestEmail}
+                    onChange={handleChange}
                     className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
                     style={{ borderRadius: 0 }}
-                    required 
+                    required
                     readOnly
                   />
                 </Form.Group>
@@ -238,16 +238,16 @@ const ReservationForm = () => {
 
                 <Form.Group className="mb-4">
                   <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Number of Guests</Form.Label>
-                  <Form.Control 
-                    type="number" 
-                    name="numberOfGuests" 
-                    min="1" 
+                  <Form.Control
+                    type="number"
+                    name="numberOfGuests"
+                    min="1"
                     max={selectedRoom ? selectedRoom.capacity : 5}
-                    value={formData.numberOfGuests} 
-                    onChange={handleChange} 
+                    value={formData.numberOfGuests}
+                    onChange={handleChange}
                     className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
                     style={{ borderRadius: 0 }}
-                    required 
+                    required
                   />
                   {selectedRoom && (
                     <Form.Text className="text-muted small">
@@ -258,20 +258,20 @@ const ReservationForm = () => {
 
                 <Form.Group className="mb-5">
                   <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Special Requests</Form.Label>
-                  <Form.Control 
-                    as="textarea" 
-                    rows={3} 
-                    name="specialRequests" 
-                    value={formData.specialRequests} 
-                    onChange={handleChange} 
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="specialRequests"
+                    value={formData.specialRequests}
+                    onChange={handleChange}
                     className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
                     style={{ borderRadius: 0 }}
                     placeholder="Any specific preferences?"
                   />
                 </Form.Group>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   variant="dark"
                   className="w-100 py-3 rounded-0 text-uppercase letter-spacing-2"
                   disabled={submitting || !selectedRoom}
@@ -282,41 +282,41 @@ const ReservationForm = () => {
             </div>
           </Col>
 
-          <Col lg={5}>
-            <div className="sticky-top" style={{ top: '100px', zIndex: 1 }}>
-              <div className="bg-white border shadow-sm rounded-0 overflow-hidden">
+          <Col lg={5} className="order-1 order-lg-2">
+            <div className="sticky-md-top" style={{ top: '100px', zIndex: 1 }}>
+              <div className="bg-white border shadow-sm rounded-0 overflow-hidden mb-4 mb-lg-0">
                 <div className="p-4 border-bottom bg-surface">
                   <h5 className="mb-0 fw-bold letter-spacing-2 text-center text-uppercase small">Your Stay Summary</h5>
                 </div>
-                
+
                 {selectedRoom ? (
                   <>
                     <div className="position-relative">
-                      <img 
-                        src={selectedRoom.image || 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'} 
-                        style={{ height: '200px', objectFit: 'cover', width: '100%' }}
+                      <img
+                        src={selectedRoom.image || 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+                        style={{ height: '180px', objectFit: 'cover', width: '100%' }}
                         alt="Room"
                       />
-                      <div className="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-to-t from-black-50">
-                         <h5 className="text-white fw-bold mb-0 text-shadow">{selectedRoom.type} Room</h5>
+                      <div className="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-to-t from-black-50" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.5))' }}>
+                        <h5 className="text-white fw-bold mb-0 text-shadow">{selectedRoom.type} Room</h5>
                       </div>
                     </div>
 
                     <div className="p-4">
                       <div className="d-flex justify-content-between align-items-center mb-4">
-                         <span className="badge bg-light text-dark border rounded-0 px-3 py-2">Room {selectedRoom.roomNumber}</span>
-                         <span className="text-muted small">{formData.numberOfGuests} Guests</span>
+                        <span className="badge bg-light text-dark border rounded-0 px-3 py-2">Room {selectedRoom.roomNumber}</span>
+                        <span className="text-muted small">{formData.numberOfGuests} Guests</span>
                       </div>
-                      
+
                       <div className="d-flex justify-content-between mb-2">
-                        <span className="text-muted">Price per night</span>
-                        <span className="fw-bold">₹{selectedRoom.price}</span>
+                        <span className="text-muted small">Price per night</span>
+                        <span className="fw-bold small">₹{selectedRoom.price}</span>
                       </div>
                       <div className="d-flex justify-content-between mb-2">
-                        <span className="text-muted">Duration</span>
-                        <span className="fw-bold">{nights} nights</span>
+                        <span className="text-muted small">Duration</span>
+                        <span className="fw-bold small">{nights} nights</span>
                       </div>
-                      
+
                       <hr className="my-4 opacity-10" />
 
                       <div className="d-flex justify-content-between align-items-center">
@@ -325,7 +325,7 @@ const ReservationForm = () => {
                       </div>
 
                       <div className="mt-4 text-center">
-                        <small className="text-muted d-flex align-items-center justify-content-center">
+                        <small className="text-muted d-flex align-items-center justify-content-center" style={{ fontSize: '0.75rem' }}>
                           <FaCheckCircle className="text-muted me-2" /> Free Cancellation until 24h before
                         </small>
                       </div>

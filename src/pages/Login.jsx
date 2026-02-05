@@ -9,7 +9,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -25,7 +25,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await dispatch(loginUser(formData.email, formData.password));
-    
+
     if (result.success) {
       navigate('/');
     }
@@ -37,17 +37,17 @@ const Login = () => {
         <Row className="justify-content-center">
           <Col md={6} lg={5} xl={4}>
             <div className="text-center mb-5 animate-fade-in">
-               <h2 className="display-6 fw-bold text-main mb-2">Welcome Back</h2>
-               <p className="text-muted small text-uppercase letter-spacing-2">Sign in to your account</p>
+              <h2 className="display-6 fw-bold text-main mb-2">Welcome Back</h2>
+              <p className="text-muted small text-uppercase letter-spacing-2">Sign in to your account</p>
             </div>
-            
-            <div className="bg-surface p-4 p-md-5 border-0 shadow-sm rounded-0 animate-fade-in">
+
+            <div className="bg-surface p-4 p-md-5 border-0 shadow-sm rounded-0 animate-fade-in mx-2 mx-md-0">
               {error && (
                 <Alert variant="danger" className="border-0 bg-danger bg-opacity-10 text-danger rounded-0 mb-4">
                   {error}
                 </Alert>
               )}
-              
+
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-4" controlId="email">
                   <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Email Address</Form.Label>
@@ -62,7 +62,7 @@ const Login = () => {
                     style={{ borderRadius: 0 }}
                   />
                 </Form.Group>
-                
+
                 <Form.Group className="mb-5" controlId="password">
                   <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Password</Form.Label>
                   <Form.Control
@@ -76,20 +76,20 @@ const Login = () => {
                     style={{ borderRadius: 0 }}
                   />
                 </Form.Group>
-                
+
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                  <Form.Check 
-                    type="checkbox" 
-                    label="Remember me" 
+                  <Form.Check
+                    type="checkbox"
+                    label="Remember me"
                     className="small text-muted"
                   />
                   <a href="#" className="small text-muted text-decoration-underline">Forgot Password?</a>
                 </div>
-                
+
                 <div className="d-grid">
-                  <Button 
-                    variant="dark" 
-                    type="submit" 
+                  <Button
+                    variant="dark"
+                    type="submit"
                     className="rounded-0 py-3 text-uppercase letter-spacing-2"
                     disabled={loading}
                   >

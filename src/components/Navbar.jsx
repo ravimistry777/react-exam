@@ -44,12 +44,17 @@ const Navbar = () => {
     >
       <Container>
         <BsNavbar.Brand as={Link} to="/" className="d-flex align-items-center" onClick={handleNavClick}>
-          <span className="fw-bold h4 mb-0" style={{ fontFamily: '"Playfair Display", serif', letterSpacing: '-0.02em' }}>
+          <span className="fw-bold mb-0 responsive-brand" style={{ fontFamily: '"Playfair Display", serif', letterSpacing: '-0.02em' }}>
             LUXURY<span className="text-muted fw-light">STAY</span>
           </span>
         </BsNavbar.Brand>
         
-        <BsNavbar.Toggle aria-controls="navbar-nav" className="border-0 shadow-none" onClick={() => setExpanded(expanded ? false : "expanded")} />
+        <BsNavbar.Toggle aria-controls="navbar-nav" className="border-0 shadow-none p-0" onClick={() => setExpanded(expanded ? false : "expanded")}>
+          <div className="hamburger-icon">
+            <span className="bg-dark"></span>
+            <span className="bg-dark"></span>
+          </div>
+        </BsNavbar.Toggle>
         
         <BsNavbar.Collapse id="navbar-nav">
           <Nav className="mx-auto gap-4 py-3 py-lg-0">

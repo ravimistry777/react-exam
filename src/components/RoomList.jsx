@@ -79,14 +79,14 @@ const RoomList = () => {
           <h2 className="display-5 mb-2" style={{ fontFamily: '"Playfair Display", serif' }}>Accommodations</h2>
           <p className="text-muted small text-uppercase letter-spacing-2">Curated selection of luxury suites</p>
         </div>
-        
+
         {/* Filters and Sorting */}
         <div className="border-top border-bottom py-4 mb-5">
-          <Row className="g-3 align-items-end justify-content-center">
-            <Col md={3}>
+          <Row className="gy-4 align-items-end">
+            <Col xs={12} lg={3}>
               <Form.Group>
                 <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Sort By</Form.Label>
-                <Form.Select 
+                <Form.Select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="form-control-modern rounded-0 border-0 border-bottom"
@@ -98,11 +98,11 @@ const RoomList = () => {
                 </Form.Select>
               </Form.Group>
             </Col>
-            
-            <Col md={3}>
+
+            <Col xs={12} lg={3}>
               <Form.Group>
                 <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Room Type</Form.Label>
-                <Form.Select 
+                <Form.Select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                   className="form-control-modern rounded-0 border-0 border-bottom"
@@ -115,7 +115,7 @@ const RoomList = () => {
               </Form.Group>
             </Col>
 
-            <Col md={2}>
+            <Col xs={6} lg={3}>
               <Form.Group>
                 <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Min Price</Form.Label>
                 <Form.Control
@@ -128,7 +128,7 @@ const RoomList = () => {
               </Form.Group>
             </Col>
 
-            <Col md={2}>
+            <Col xs={6} lg={3}>
               <Form.Group>
                 <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Max Price</Form.Label>
                 <Form.Control

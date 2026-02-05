@@ -13,7 +13,7 @@ const Footer = () => {
               LUXURY<span className="text-muted fw-light">STAY</span>
             </h3>
             <p className="text-muted small mb-4" style={{ lineHeight: '1.8' }}>
-              A sanctuary of calm in the heart of the city. 
+              A sanctuary of calm in the heart of the city.
               We redefine luxury with understated elegance and personalized service.
             </p>
             <div className="d-flex gap-3">
@@ -23,7 +23,7 @@ const Footer = () => {
               <a href="#" className="text-dark hover-opacity"><FaLinkedin size={18} /></a>
             </div>
           </Col>
-          
+
           <Col md={2}>
             <h6 className="mb-4 text-uppercase small fw-bold letter-spacing-2 text-muted">Explore</h6>
             <ul className="list-unstyled small">
@@ -33,7 +33,7 @@ const Footer = () => {
               <li className="mb-3"><Link to="/dining" className="text-dark text-decoration-none hover-underline">Dining</Link></li>
             </ul>
           </Col>
-          
+
           <Col md={3}>
             <h6 className="mb-4 text-uppercase small fw-bold letter-spacing-2 text-muted">Visit Us</h6>
             <ul className="list-unstyled small text-muted">
@@ -42,24 +42,24 @@ const Footer = () => {
               <li className="mb-3">ravisiddhapura777@gmail.com</li>
             </ul>
           </Col>
-          
+
           <Col md={3} lg={2}>
-             <h6 className="mb-4 text-uppercase small fw-bold letter-spacing-2 text-muted">Newsletter</h6>
-             <div className="d-flex flex-column gap-2">
-               <input 
-                 type="email" 
-                 placeholder="Email Address" 
-                 className="form-control form-control-sm border-0 border-bottom rounded-0 px-0 bg-transparent"
-                 style={{ boxShadow: 'none' }}
-               />
-               <button className="btn btn-sm btn-link text-dark text-decoration-none p-0 text-start fw-bold mt-2">
-                 SUBSCRIBE →
-               </button>
-             </div>
+            <h6 className="mb-4 text-uppercase small fw-bold letter-spacing-2 text-muted">Newsletter</h6>
+            <div className="d-flex flex-column gap-2">
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="form-control form-control-sm border-0 border-bottom rounded-0 px-0 bg-transparent"
+                style={{ boxShadow: 'none' }}
+              />
+              <button className="btn btn-sm btn-link text-dark text-decoration-none p-0 text-start fw-bold mt-2">
+                SUBSCRIBE →
+              </button>
+            </div>
           </Col>
         </Row>
-        
-        <div className="border-top mt-5 pt-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+        <div className="border-top mt-5 pt-4 d-flex justify-content-center justify-content-md-between align-items-center flex-wrap gap-3 text-center text-md-start">
           <p className="mb-0 small text-muted">© {new Date().getFullYear()} Luxury Stay. All rights reserved.</p>
           <div className="d-flex gap-4 small text-muted">
             <a href="#" className="text-decoration-none text-muted">Privacy Policy</a>

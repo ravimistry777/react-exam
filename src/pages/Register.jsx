@@ -9,7 +9,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -18,7 +18,7 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
-  
+
   const [passwordError, setPasswordError] = useState('');
 
   const handleChange = (e) => {
@@ -26,7 +26,7 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    
+
     if (e.target.name === 'confirmPassword' || e.target.name === 'password') {
       if (formData.password !== e.target.value && e.target.name === 'confirmPassword') {
         setPasswordError('Passwords do not match');
@@ -38,30 +38,30 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       setPasswordError('Passwords do not match');
       return;
     }
-    
+
     if (formData.password.length < 6) {
       setPasswordError('Password must be at least 6 characters long');
       return;
     }
-    
+
     const userData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       phone: formData.phone,
       role: 'user'
     };
-    
+
     const result = await dispatch(registerUser(
-      formData.email, 
-      formData.password, 
+      formData.email,
+      formData.password,
       userData
     ));
-    
+
     if (result.success) {
       navigate('/');
     }
@@ -73,17 +73,17 @@ const Register = () => {
         <Row className="justify-content-center">
           <Col md={8} lg={6}>
             <div className="text-center mb-5 animate-fade-in">
-               <h2 className="display-6 fw-bold text-main mb-2">Join Us</h2>
-               <p className="text-muted small text-uppercase letter-spacing-2">Create your account to start your journey</p>
+              <h2 className="display-6 fw-bold text-main mb-2">Join Us</h2>
+              <p className="text-muted small text-uppercase letter-spacing-2">Create your account to start your journey</p>
             </div>
-            
-            <div className="bg-surface p-4 p-md-5 border-0 shadow-sm rounded-0 animate-fade-in">
+
+            <div className="bg-surface p-4 p-md-5 border-0 shadow-sm rounded-0 animate-fade-in mx-2 mx-md-0">
               {error && (
                 <Alert variant="danger" className="border-0 bg-danger bg-opacity-10 text-danger rounded-0 mb-4">
                   {error}
                 </Alert>
               )}
-              
+
               <Form onSubmit={handleSubmit}>
                 <Row className="g-4">
                   <Col md={6}>
@@ -177,11 +177,11 @@ const Register = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                
+
                 <div className="d-grid mt-5">
-                  <Button 
-                    variant="dark" 
-                    type="submit" 
+                  <Button
+                    variant="dark"
+                    type="submit"
                     className="rounded-0 py-3 text-uppercase letter-spacing-2"
                     disabled={loading}
                   >
