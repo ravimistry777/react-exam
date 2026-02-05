@@ -5,7 +5,19 @@ import {
   cancelReservation,
   updateReservation 
 } from '../redux/thunks/reservationThunks';
-import { FaEdit, FaTrash, FaEye, FaCalendarCheck, FaCalendarTimes } from 'react-icons/fa';
+import { 
+  Container, 
+  Row, 
+  Col, 
+  Card, 
+  Table, 
+  Badge, 
+  Button, 
+  Form, 
+  Spinner, 
+  Alert 
+} from 'react-bootstrap';
+import { FaEdit, FaTrash, FaCheck, FaTimes, FaSortAmountDown } from 'react-icons/fa';
 
 const ReservationList = () => {
   const dispatch = useDispatch();
@@ -24,10 +36,7 @@ const ReservationList = () => {
 
   const handleCancel = async (reservationId) => {
     if (window.confirm('Are you sure you want to cancel this reservation?')) {
-      const result = await dispatch(cancelReservation(reservationId));
-      if (result.success) {
-        alert('Reservation cancelled successfully');
-      }
+      await dispatch(cancelReservation(reservationId));
     }
   };
 
@@ -41,10 +50,9 @@ const ReservationList = () => {
   };
 
   const handleUpdate = async (reservationId) => {
-    const result = await dispatch(updateReservation(reservationId, editData));
-    if (result.success) {
+    const result = await dispatch(updateReservation({ id: reservationId, ...editData }));
+    if (result.type.endsWith('fulfilled')) {
       setEditingId(null);
-      alert('Reservation updated successfully');
     }
   };
 
@@ -62,172 +70,175 @@ const ReservationList = () => {
 
   const getStatusBadge = (status) => {
     switch(status) {
-      case 'confirmed': return <span className="badge bg-success">Confirmed</span>;
-      case 'cancelled': return <span className="badge bg-danger">Cancelled</span>;
-      default: return <span className="badge bg-secondary">{status}</span>;
+      case 'confirmed': return <span className="badge bg-success bg-opacity-10 text-success rounded-0 px-3 fw-normal letter-spacing-1">CONFIRMED</span>;
+      case 'cancelled': return <span className="badge bg-danger bg-opacity-10 text-danger rounded-0 px-3 fw-normal letter-spacing-1">CANCELLED</span>;
+      default: return <span className="badge bg-secondary bg-opacity-10 text-secondary rounded-0 px-3 fw-normal letter-spacing-1">{status}</span>;
     }
   };
 
   if (loading) {
     return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
+      <Container className="d-flex justify-content-center align-items-center min-vh-100 bg-body">
+        <Spinner animation="border" role="status" variant="dark">
           <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
+        </Spinner>
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="alert alert-danger text-center">
-        Error: {error}
-      </div>
+      <Container className="py-5">
+        <Alert variant="danger" className="text-center rounded-0 border-0 bg-danger bg-opacity-10 text-danger">
+          Error: {error}
+        </Alert>
+      </Container>
     );
   }
 
   return (
-    <div className="container py-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>My Reservations</h2>
-        <div className="d-flex gap-2">
-          <select 
-            className="form-select w-auto"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="all">All Reservations</option>
-            <option value="active">Active</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="completed">Completed</option>
-          </select>
+    <div className="bg-body min-vh-100 py-5">
+      <Container>
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-end mb-5 animate-fade-in">
+          <div>
+            <span className="text-muted small text-uppercase letter-spacing-2 fw-bold">Dashboard</span>
+            <h2 className="display-6 fw-bold mt-2 text-main">My Bookings</h2>
+            <p className="text-muted mb-0 small text-uppercase letter-spacing-1">Manage your upcoming and past reservations</p>
+          </div>
+          
+          <div className="mt-4 mt-md-0">
+            <Form.Select 
+              value={filter} 
+              onChange={(e) => setFilter(e.target.value)}
+              className="rounded-0 border-0 border-bottom bg-transparent shadow-none"
+              style={{ minWidth: '200px', borderRadius: 0 }}
+            >
+              <option value="all">All Bookings</option>
+              <option value="active">Active</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="completed">Past</option>
+            </Form.Select>
+          </div>
         </div>
-      </div>
 
-      {filteredReservations.length === 0 ? (
-        <div className="text-center py-5">
-          <FaCalendarCheck size={48} className="text-muted mb-3" />
-          <h4>No reservations found</h4>
-          <p className="text-muted">You haven't made any reservations yet.</p>
-        </div>
-      ) : (
-        <div className="table-responsive">
-          <table className="table table-hover">
-            <thead className="table-dark">
-              <tr>
-                <th>Reservation ID</th>
-                <th>Room Details</th>
-                <th>Guest Info</th>
-                <th>Dates</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredReservations.map(reservation => (
-                <tr key={reservation.id}>
-                  <td>
-                    <small className="text-muted">#{reservation.id.substring(0, 8)}</small>
-                  </td>
-                  
-                  <td>
-                    <div>
-                      <strong>{reservation.roomType}</strong>
-                      <div className="small">Room #{reservation.roomNumber}</div>
-                    </div>
-                  </td>
-                  
-                  <td>
-                    {editingId === reservation.id ? (
-                      <div>
-                        <input
-                          type="text"
-                          className="form-control form-control-sm mb-1"
-                          value={editData.guestName}
-                          onChange={(e) => setEditData({...editData, guestName: e.target.value})}
-                        />
-                        <input
-                          type="tel"
-                          className="form-control form-control-sm"
-                          value={editData.guestPhone}
-                          onChange={(e) => setEditData({...editData, guestPhone: e.target.value})}
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <div>{reservation.guestName}</div>
-                        <div className="small">{reservation.guestPhone}</div>
-                      </div>
-                    )}
-                  </td>
-                  
-                  <td>
-                    <div className="small">
-                      <div><strong>Check-in:</strong> {new Date(reservation.checkIn).toLocaleDateString()}</div>
-                      <div><strong>Check-out:</strong> {new Date(reservation.checkOut).toLocaleDateString()}</div>
-                    </div>
-                  </td>
-                  
-                  <td>
-                    <strong className="text-primary">₹{reservation.totalAmount}</strong>
-                  </td>
-                  
-                  <td>
-                    {getStatusBadge(reservation.status)}
-                  </td>
-                  
-                  <td>
-                    {editingId === reservation.id ? (
-                      <div className="d-flex gap-1">
-                        <button 
-                          className="btn btn-success btn-sm"
-                          onClick={() => handleUpdate(reservation.id)}
-                        >
-                          Save
-                        </button>
-                        <button 
-                          className="btn btn-secondary btn-sm"
-                          onClick={() => setEditingId(null)}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="d-flex gap-1">
-                        <button 
-                          className="btn btn-outline-primary btn-sm"
-                          onClick={() => handleEdit(reservation)}
-                          title="Edit"
-                        >
-                          <FaEdit />
-                        </button>
-                        
-                        {reservation.status === 'confirmed' && (
-                          <button 
-                            className="btn btn-outline-danger btn-sm"
-                            onClick={() => handleCancel(reservation.id)}
-                            title="Cancel"
-                          >
-                            <FaTrash />
-                          </button>
+        {filteredReservations.length === 0 ? (
+          <div className="text-center py-5 bg-surface border border-dashed rounded-0 animate-fade-in">
+            <h4 className="text-muted h6 text-uppercase letter-spacing-2">No reservations found</h4>
+            <p className="text-muted mb-0 small">You haven't made any bookings yet.</p>
+          </div>
+        ) : (
+          <div className="bg-surface border-0 shadow-sm rounded-0 animate-fade-in overflow-hidden">
+            <div className="table-responsive">
+              <Table hover className="mb-0 align-middle">
+                <thead className="bg-light border-bottom">
+                  <tr>
+                    <th className="py-3 px-4 border-0 text-muted small text-uppercase fw-bold letter-spacing-1">Room Info</th>
+                    <th className="py-3 px-4 border-0 text-muted small text-uppercase fw-bold letter-spacing-1">Guest Details</th>
+                    <th className="py-3 px-4 border-0 text-muted small text-uppercase fw-bold letter-spacing-1">Dates</th>
+                    <th className="py-3 px-4 border-0 text-muted small text-uppercase fw-bold letter-spacing-1">Amount</th>
+                    <th className="py-3 px-4 border-0 text-muted small text-uppercase fw-bold letter-spacing-1">Status</th>
+                    <th className="py-3 px-4 border-0 text-muted small text-uppercase fw-bold letter-spacing-1 text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredReservations.map((res) => (
+                    <tr key={res.id} className="border-bottom">
+                      <td className="px-4 py-4">
+                        <div className="fw-bold text-main">{res.roomType}</div>
+                        <div className="small text-muted">Room {res.roomNumber}</div>
+                      </td>
+                      <td className="px-4 py-4">
+                        {editingId === res.id ? (
+                          <div className="d-flex flex-column gap-2">
+                            <Form.Control 
+                              size="sm"
+                              value={editData.guestName}
+                              onChange={(e) => setEditData({...editData, guestName: e.target.value})}
+                              placeholder="Name"
+                              className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none py-1"
+                            />
+                            <Form.Control 
+                              size="sm"
+                              value={editData.guestPhone}
+                              onChange={(e) => setEditData({...editData, guestPhone: e.target.value})}
+                              placeholder="Phone"
+                              className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none py-1"
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <div className="fw-medium text-main">{res.guestName}</div>
+                            <div className="small text-muted">{res.guestPhone}</div>
+                          </>
                         )}
-                        
-                        <button 
-                          className="btn btn-outline-info btn-sm"
-                          title="View Details"
-                        >
-                          <FaEye />
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="small text-muted">
+                          <div className="mb-1"><span className="fw-bold text-main">In:</span> {new Date(res.checkIn).toLocaleDateString()}</div>
+                          <div><span className="fw-bold text-main">Out:</span> {new Date(res.checkOut).toLocaleDateString()}</div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="fw-bold text-main">₹{res.totalAmount}</div>
+                      </td>
+                      <td className="px-4 py-4">
+                        {getStatusBadge(res.status)}
+                      </td>
+                      <td className="px-4 py-4 text-end">
+                        {res.status === 'confirmed' && (
+                          <div className="d-flex gap-2 justify-content-end">
+                            {editingId === res.id ? (
+                              <>
+                                <Button 
+                                  variant="success" 
+                                  size="sm" 
+                                  className="btn-icon rounded-0 p-2"
+                                  onClick={() => handleUpdate(res.id)}
+                                >
+                                  <FaCheck />
+                                </Button>
+                                <Button 
+                                  variant="secondary" 
+                                  size="sm" 
+                                  className="btn-icon rounded-0 p-2"
+                                  onClick={() => setEditingId(null)}
+                                >
+                                  <FaTimes />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button 
+                                  variant="link" 
+                                  size="sm" 
+                                  className="text-muted p-2"
+                                  onClick={() => handleEdit(res)}
+                                  title="Edit Guest Info"
+                                >
+                                  <FaEdit />
+                                </Button>
+                                <Button 
+                                  variant="link" 
+                                  size="sm" 
+                                  className="text-danger p-2"
+                                  onClick={() => handleCancel(res.id)}
+                                  title="Cancel Reservation"
+                                >
+                                  <FaTrash />
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        )}
+      </Container>
     </div>
   );
 };

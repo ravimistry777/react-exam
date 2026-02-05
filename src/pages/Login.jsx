@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../redux/thunks/authThunks';
-import { FaSignInAlt, FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaSignInAlt, FaEnvelope, FaLock, FaLeaf } from 'react-icons/fa';
+import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -31,86 +32,81 @@ const Login = () => {
   };
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white text-center">
-              <FaSignInAlt className="me-2" />
-              <h4 className="mb-0">Login to Your Account</h4>
+    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-body py-5">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={6} lg={5} xl={4}>
+            <div className="text-center mb-5 animate-fade-in">
+               <h2 className="display-6 fw-bold text-main mb-2">Welcome Back</h2>
+               <p className="text-muted small text-uppercase letter-spacing-2">Sign in to your account</p>
             </div>
             
-            <div className="card-body p-4">
+            <div className="bg-surface p-4 p-md-5 border-0 shadow-sm rounded-0 animate-fade-in">
               {error && (
-                <div className="alert alert-danger">{error}</div>
+                <Alert variant="danger" className="border-0 bg-danger bg-opacity-10 text-danger rounded-0 mb-4">
+                  {error}
+                </Alert>
               )}
               
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label">
-                    <FaEnvelope className="me-2" />
-                    Email Address
-                  </label>
-                  <input
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-4" controlId="email">
+                  <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Email Address</Form.Label>
+                  <Form.Control
                     type="email"
-                    className="form-control"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    placeholder="Enter your email"
+                    placeholder="name@example.com"
+                    className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
+                    style={{ borderRadius: 0 }}
                   />
-                </div>
+                </Form.Group>
                 
-                <div className="mb-4">
-                  <label className="form-label">
-                    <FaLock className="me-2" />
-                    Password
-                  </label>
-                  <input
+                <Form.Group className="mb-5" controlId="password">
+                  <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Password</Form.Label>
+                  <Form.Control
                     type="password"
-                    className="form-control"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     required
                     placeholder="Enter your password"
+                    className="rounded-0 border-0 border-bottom px-0 bg-transparent shadow-none"
+                    style={{ borderRadius: 0 }}
                   />
+                </Form.Group>
+                
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                  <Form.Check 
+                    type="checkbox" 
+                    label="Remember me" 
+                    className="small text-muted"
+                  />
+                  <a href="#" className="small text-muted text-decoration-underline">Forgot Password?</a>
                 </div>
                 
-                <div className="d-grid mb-3">
-                  <button 
+                <div className="d-grid">
+                  <Button 
+                    variant="dark" 
                     type="submit" 
-                    className="btn btn-primary btn-lg"
+                    className="rounded-0 py-3 text-uppercase letter-spacing-2"
                     disabled={loading}
                   >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Logging in...
-                      </>
-                    ) : (
-                      <>
-                        <FaSignInAlt className="me-2" />
-                        Login
-                      </>
-                    )}
-                  </button>
+                    {loading ? <Spinner size="sm" animation="border" /> : 'Sign In'}
+                  </Button>
                 </div>
-                
-                <div className="text-center">
-                  <p className="mb-0">
-                    Don't have an account? 
-                    <Link to="/register" className="ms-2 text-decoration-none">
-                      Register here
-                    </Link>
-                  </p>
-                </div>
-              </form>
+              </Form>
+
+              <div className="text-center mt-4">
+                <p className="small text-muted mb-0">
+                  Don't have an account? <Link to="/register" className="text-dark fw-bold text-decoration-underline">Sign up</Link>
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

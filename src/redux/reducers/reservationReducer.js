@@ -19,6 +19,20 @@ const reservationReducer = (state = initialState, action) => {
     
     case ADD_RESERVATION_SUCCESS:
       return { ...state, reservations: [...state.reservations, action.payload] };
+
+    case UPDATE_RESERVATION_SUCCESS:
+      return {
+        ...state,
+        reservations: state.reservations.map((reservation) =>
+          reservation.id === action.payload.id ? { ...reservation, ...action.payload } : reservation
+        ),
+      };
+
+    case DELETE_RESERVATION_SUCCESS:
+      return {
+        ...state,
+        reservations: state.reservations.filter((reservation) => reservation.id !== action.payload),
+      };
     
     default:
       return state;

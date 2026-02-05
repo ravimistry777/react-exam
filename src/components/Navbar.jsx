@@ -1,81 +1,108 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/thunks/authThunks';
+import { Navbar as BsNavbar, Nav, Container, Button, Dropdown } from 'react-bootstrap';
+import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [scrolled, setScrolled] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
+    setExpanded(false);
   };
 
+  const handleNavClick = () => setExpanded(false);
+
+  if (['/login', '/register'].includes(location.pathname)) {
+    return null;
+  }
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          🏨 Hotel Management
-        </Link>
+    <BsNavbar 
+      expand="lg" 
+      fixed="top"
+      expanded={expanded}
+      onToggle={() => setExpanded(!expanded)}
+      className={`navbar-modern ${scrolled || expanded ? 'scrolled' : ''} ${expanded ? 'bg-white shadow-sm' : ''}`}
+    >
+      <Container>
+        <BsNavbar.Brand as={Link} to="/" className="d-flex align-items-center" onClick={handleNavClick}>
+          <span className="fw-bold h4 mb-0" style={{ fontFamily: '"Playfair Display", serif', letterSpacing: '-0.02em' }}>
+            LUXURY<span className="text-muted fw-light">STAY</span>
+          </span>
+        </BsNavbar.Brand>
         
-        <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        <BsNavbar.Toggle aria-controls="navbar-nav" className="border-0 shadow-none" onClick={() => setExpanded(expanded ? false : "expanded")} />
         
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/rooms">Rooms</Link>
-            </li>
+        <BsNavbar.Collapse id="navbar-nav">
+          <Nav className="mx-auto gap-4 py-3 py-lg-0">
+            <Nav.Link as={Link} to="/" className="nav-link-modern" active={location.pathname === '/'} onClick={handleNavClick}>HOME</Nav.Link>
+            <Nav.Link as={Link} to="/rooms" className="nav-link-modern" active={location.pathname === '/rooms'} onClick={handleNavClick}>SUITES</Nav.Link>
             {isAuthenticated && (
               <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/reservations">My Reservations</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/reserve">Book Room</Link>
-                </li>
+                <Nav.Link as={Link} to="/reservations" className="nav-link-modern" active={location.pathname === '/reservations'} onClick={handleNavClick}>MY BOOKINGS</Nav.Link>
+                <Nav.Link as={Link} to="/reserve" className="nav-link-modern" active={location.pathname === '/reserve'} onClick={handleNavClick}>RESERVE</Nav.Link>
               </>
             )}
-          </ul>
+          </Nav>
           
-          <div className="d-flex">
+          <div className="d-flex align-items-center mt-3 mt-lg-0 pb-3 pb-lg-0">
             {isAuthenticated ? (
-              <div className="d-flex align-items-center">
-                <span className="text-white me-3">
-                  Welcome, {user?.email?.split('@')[0]}
-                </span>
-                <button 
-                  onClick={handleLogout} 
-                  className="btn btn-outline-light btn-sm"
-                >
-                  Logout
-                </button>
-              </div>
+              <Dropdown align="end">
+                <Dropdown.Toggle variant="transparent" className="d-flex align-items-center gap-2 border-0 p-0 shadow-none text-dark">
+                  <span className="fw-medium small text-uppercase letter-spacing-1">{user?.email?.split('@')[0]}</span>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="shadow-lg border-0 mt-3 rounded-0 p-0" style={{ minWidth: '200px' }}>
+                  <div className="px-4 py-3 border-bottom bg-light">
+                    <div className="small text-muted text-uppercase letter-spacing-1" style={{ fontSize: '0.7rem' }}>Signed in as</div>
+                    <div className="fw-medium text-truncate">{user?.email}</div>
+                  </div>
+                  <Dropdown.Item as={Link} to="/reservations" className="py-2 px-4 small text-uppercase letter-spacing-1" onClick={handleNavClick}>Dashboard</Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogout} className="text-danger py-2 px-4 small text-uppercase letter-spacing-1">
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             ) : (
-              <>
-                <Link to="/login" className="btn btn-outline-light btn-sm me-2">
-                  Login
+              <div className="d-flex gap-3">
+                <Link 
+                  to="/login" 
+                  className="text-decoration-none text-dark small fw-bold text-uppercase letter-spacing-1 py-2"
+                  onClick={handleNavClick}
+                >
+                  Log In
                 </Link>
-                <Link to="/register" className="btn btn-light btn-sm">
-                  Register
+                <Link 
+                  to="/register" 
+                  className="btn btn-primary-custom px-4 py-2 rounded-0 small"
+                  onClick={handleNavClick}
+                >
+                  Book Your Stay
                 </Link>
-              </>
+              </div>
             )}
           </div>
-        </div>
-      </div>
-    </nav>
+        </BsNavbar.Collapse>
+      </Container>
+    </BsNavbar>
   );
 };
 

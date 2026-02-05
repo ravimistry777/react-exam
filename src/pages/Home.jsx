@@ -1,81 +1,111 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHotel, FaBed, FaWifi, FaSwimmingPool, FaUtensils, FaCar } from 'react-icons/fa';
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaWifi, FaSwimmingPool, FaUtensils, FaConciergeBell, FaSpa, FaArrowRight } from 'react-icons/fa';
 
 const Home = () => {
   const features = [
-    { icon: <FaBed />, title: 'Luxurious Rooms', desc: 'Comfortable rooms with modern amenities' },
-    { icon: <FaWifi />, title: 'Free WiFi', desc: 'High-speed internet throughout the hotel' },
-    { icon: <FaSwimmingPool />, title: 'Swimming Pool', desc: 'Outdoor pool with lounge area' },
-    { icon: <FaUtensils />, title: 'Restaurant', desc: 'Multi-cuisine dining experience' },
-    { icon: <FaCar />, title: 'Parking', desc: 'Secure parking facilities available' },
-    { icon: <FaHotel />, title: '24/7 Service', desc: 'Round the clock customer service' }
+    { icon: <FaUtensils />, title: 'Fine Dining', desc: 'Curated culinary experiences.' },
+    { icon: <FaSpa />, title: 'Wellness Spa', desc: 'Holistic treatments for body and mind.' },
+    { icon: <FaSwimmingPool />, title: 'Infinity Pool', desc: 'Panoramic views of the city skyline.' },
   ];
 
   return (
-    <div>
+    <div className="home-page overflow-hidden">
       {/* Hero Section */}
-      <div className="bg-primary text-white py-5">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-6">
-              <h1 className="display-4 fw-bold mb-3">
-                Welcome to Luxury Hotel Management
+      <div className="hero-modern min-vh-100 d-flex align-items-center bg-white">
+        <Container>
+          <Row className="align-items-center gy-5">
+            <Col lg={5} className="order-lg-1 animate-fade-in">
+              <span className="d-block text-uppercase letter-spacing-2 small fw-bold text-muted mb-4">
+                Est. 2024
+              </span>
+              <h1 className="display-2 fw-bold mb-4 text-dark lh-1" style={{ fontFamily: '"Playfair Display", serif', letterSpacing: '-0.03em' }}>
+                A Sanctuary <br />
+                <span className="fst-italic fw-light text-muted">of Calm</span>
               </h1>
-              <p className="lead mb-4">
-                Experience world-class hospitality with our premium rooms and exceptional services.
-                Book your stay now and enjoy exclusive benefits.
+              <p className="lead mb-5 text-secondary fw-light" style={{ maxWidth: '400px', lineHeight: '1.8' }}>
+                Experience the art of slow living in the heart of the bustling city. 
+                Where minimalist design meets exceptional service.(for test username login- hotel@test.in , 123456)
               </p>
-              <div className="d-flex gap-3">
-                <Link to="/rooms" className="btn btn-light btn-lg">
-                  View Rooms
+              <div className="d-flex gap-4">
+                <Link to="/rooms" className="btn btn-dark rounded-0 px-5 py-3 text-uppercase letter-spacing-1 small">
+                  Explore Suites
                 </Link>
-                <Link to="/reserve" className="btn btn-outline-light btn-lg">
-                  Book Now
+                <Link to="/reserve" className="text-dark text-decoration-none d-flex align-items-center text-uppercase letter-spacing-1 small fw-bold hover-opacity">
+                  Check Availability <FaArrowRight className="ms-2" size={12} />
                 </Link>
               </div>
-            </div>
-            <div className="col-lg-6 text-center">
-              <div className="position-relative">
-                <div className="rounded-circle bg-white p-4 d-inline-block">
-                  <FaHotel size={120} className="text-primary" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </Col>
+            <Col lg={7} className="order-lg-2 position-relative">
+               <div className="position-relative overflow-hidden" style={{ borderRadius: '4px' }}>
+                 <img 
+                  src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                  alt="Minimalist Hotel Interior" 
+                  className="img-fluid w-100"
+                  style={{ filter: 'grayscale(20%) contrast(90%)' }}
+                 />
+                 <div className="position-absolute bottom-0 start-0 bg-white p-4 d-none d-md-block" style={{ maxWidth: '200px' }}>
+                   <p className="mb-0 small text-muted font-monospace">
+                     "Design is not just what it looks like and feels like. Design is how it works."
+                   </p>
+                 </div>
+               </div>
+            </Col>
+          </Row>
+        </Container>
       </div>
 
-      {/* Features Section */}
-      <div className="py-5">
-        <div className="container">
-          <h2 className="text-center mb-5">Why Choose Our Hotel?</h2>
-          <div className="row g-4">
+      {/* Intro Section */}
+      <div className="py-6 bg-light">
+        <Container className="py-5">
+          <Row className="justify-content-center text-center">
+            <Col md={8}>
+              <h2 className="mb-4 display-5" style={{ fontFamily: '"Playfair Display", serif' }}>Unpretentious Luxury</h2>
+              <p className="text-muted fw-light lead mb-0">
+                We believe in the beauty of simplicity. Our spaces are designed to be a canvas for your experiences, 
+                free from distraction and clutter. Every detail is intentional, every amenity curated.
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
+      {/* Features Grid */}
+      <div className="py-6 bg-white">
+        <Container>
+          <Row className="g-0">
             {features.map((feature, index) => (
-              <div key={index} className="col-md-4">
-                <div className="card h-100 border-0 shadow-sm text-center p-4">
-                  <div className="text-primary mb-3" style={{ fontSize: '2.5rem' }}>
-                    {feature.icon}
-                  </div>
-                  <h5>{feature.title}</h5>
-                  <p className="text-muted">{feature.desc}</p>
+              <Col key={index} md={4} className="text-center p-5 border-end border-light">
+                <div className="mb-4 text-dark opacity-75">
+                  <span style={{ fontSize: '1.5rem' }}>{feature.icon}</span>
                 </div>
-              </div>
+                <h4 className="fw-medium mb-3 text-uppercase letter-spacing-1 fs-6">{feature.title}</h4>
+                <p className="text-muted small mb-0 px-4">
+                  {feature.desc}
+                </p>
+              </Col>
             ))}
-          </div>
-        </div>
+          </Row>
+        </Container>
       </div>
 
-      {/* CTA Section */}
-      <div className="bg-light py-5">
-        <div className="container text-center">
-          <h2 className="mb-4">Ready to Book Your Stay?</h2>
-          <p className="lead mb-4">
-            Join thousands of satisfied guests who have experienced our hospitality.
-          </p>
-          <Link to="/register" className="btn btn-primary btn-lg px-5">
-            Get Started
-          </Link>
+      {/* Image Strip */}
+      <div className="d-flex flex-wrap w-100">
+        <div className="col-md-4 col-12" style={{ height: '400px' }}>
+           <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-100 h-100 object-fit-cover" alt="Room" />
+        </div>
+        <div className="col-md-4 col-12 bg-dark text-white d-flex align-items-center justify-content-center p-5 text-center" style={{ height: '400px' }}>
+           <div>
+             <h3 className="mb-3" style={{ fontFamily: '"Playfair Display", serif' , color: "white"}}>Stay With Us</h3>
+             <p className="mb-4 text-white-50">Experience the difference.</p>
+             <Link to="/reserve" className="btn btn-outline-light rounded-0 px-4 text-uppercase letter-spacing-1 small">
+               Book Now
+             </Link>
+           </div>
+        </div>
+        <div className="col-md-4 col-12" style={{ height: '400px' }}>
+           <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-100 h-100 object-fit-cover" alt="Detail" />
         </div>
       </div>
     </div>

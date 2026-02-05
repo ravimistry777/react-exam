@@ -52,7 +52,7 @@ export const cancelReservation = (reservationId) => async (dispatch) => {
   try {
     const reservationRef = doc(db, 'reservations', reservationId);
     await updateDoc(reservationRef, { status: 'cancelled' });
-    dispatch(deleteReservationSuccess(reservationId));
+    dispatch(updateReservationSuccess({ id: reservationId, status: 'cancelled' }));
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };

@@ -30,6 +30,24 @@ const roomReducer = (state = initialState, action) => {
         filteredRooms: [...state.filteredRooms, action.payload]
       };
     
+    case UPDATE_ROOM_SUCCESS:
+      const updatedRooms = state.rooms.map(room => 
+        room.id === action.payload.id ? { ...room, ...action.payload } : room
+      );
+      return {
+        ...state,
+        rooms: updatedRooms,
+        filteredRooms: updatedRooms
+      };
+
+    case DELETE_ROOM_SUCCESS:
+      const remainingRooms = state.rooms.filter(room => room.id !== action.payload);
+      return {
+        ...state,
+        rooms: remainingRooms,
+        filteredRooms: remainingRooms
+      };
+    
     default:
       return state;
   }

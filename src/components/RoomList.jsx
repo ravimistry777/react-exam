@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../redux/thunks/roomThunks';
 import RoomDetails from './RoomDetails';
+import { Container, Row, Col, Form, Spinner, Alert } from 'react-bootstrap';
+import { FaFilter, FaSortAmountDown, FaSearch } from 'react-icons/fa';
 
 const RoomList = () => {
   const dispatch = useDispatch();
-  const { rooms, loading, error, filteredRooms } = useSelector((state) => state.rooms);
+  const { rooms, loading, error } = useSelector((state) => state.rooms);
   const [sortBy, setSortBy] = useState('price');
   const [filterType, setFilterType] = useState('all');
   const [minPrice, setMinPrice] = useState('');
@@ -52,99 +54,113 @@ const RoomList = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-white">
+        <Spinner animation="border" variant="dark" role="status">
           <span className="visually-hidden">Loading...</span>
-        </div>
+        </Spinner>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="alert alert-danger text-center">
-        Error: {error}
-      </div>
+      <Container className="py-5">
+        <Alert variant="danger" className="text-center rounded-0 border-0">
+          Error: {error}
+        </Alert>
+      </Container>
     );
   }
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-4">Available Rooms</h2>
-      
-      {/* Filters and Sorting */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="col-md-3">
-              <label className="form-label">Sort By</label>
-              <select 
-                className="form-select"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="price">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="capacity">Capacity</option>
-                <option value="type">Room Type</option>
-              </select>
-            </div>
-            
-            <div className="col-md-3">
-              <label className="form-label">Filter by Type</label>
-              <select 
-                className="form-select"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-              >
-                <option value="all">All Types</option>
-                {roomTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="col-md-3">
-              <label className="form-label">Min Price</label>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="₹ Min"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-              />
-            </div>
-            
-            <div className="col-md-3">
-              <label className="form-label">Max Price</label>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="₹ Max"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-              />
-            </div>
-          </div>
+    <div className="bg-white min-vh-100 py-6" style={{ paddingTop: '100px' }}>
+      <Container>
+        <div className="text-center mb-5 animate-fade-in">
+          <h2 className="display-5 mb-2" style={{ fontFamily: '"Playfair Display", serif' }}>Accommodations</h2>
+          <p className="text-muted small text-uppercase letter-spacing-2">Curated selection of luxury suites</p>
         </div>
-      </div>
+        
+        {/* Filters and Sorting */}
+        <div className="border-top border-bottom py-4 mb-5">
+          <Row className="g-3 align-items-end justify-content-center">
+            <Col md={3}>
+              <Form.Group>
+                <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Sort By</Form.Label>
+                <Form.Select 
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="form-control-modern rounded-0 border-0 border-bottom"
+                >
+                  <option value="price">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="capacity">Capacity</option>
+                  <option value="type">Room Type</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+            
+            <Col md={3}>
+              <Form.Group>
+                <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Room Type</Form.Label>
+                <Form.Select 
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="form-control-modern rounded-0 border-0 border-bottom"
+                >
+                  <option value="all">All Types</option>
+                  {roomTypes.map((type, index) => (
+                    <option key={index} value={type}>{type}</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
 
-      {/* Room */}
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {filteredRoomsList.length > 0 ? (
-          filteredRoomsList.map(room => (
-            <div key={room.id} className="col">
-              <RoomDetails room={room} />
-            </div>
-          ))
-        ) : (
-          <div className="col-12">
-            <div className="alert alert-info">
-              No rooms available matching your criteria.
-            </div>
-          </div>
-        )}
-      </div>
+            <Col md={2}>
+              <Form.Group>
+                <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Min Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="0"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="form-control-modern rounded-0 border-0 border-bottom"
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={2}>
+              <Form.Group>
+                <Form.Label className="small text-uppercase fw-bold letter-spacing-1 text-muted">Max Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Max"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="form-control-modern rounded-0 border-0 border-bottom"
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        </div>
+
+        {/* Room Grid */}
+        <Row xs={1} md={2} lg={3} className="g-5">
+          {filteredRoomsList.length > 0 ? (
+            filteredRoomsList.map((room) => (
+              <Col key={room.id} className="animate-fade-in">
+                <RoomDetails room={room} />
+              </Col>
+            ))
+          ) : (
+            <Col xs={12}>
+              <div className="text-center py-5">
+                <h4 className="text-muted fw-light" style={{ fontFamily: '"Playfair Display", serif' }}>No rooms found</h4>
+                <p className="text-muted small">Please adjust your search criteria</p>
+              </div>
+            </Col>
+          )}
+        </Row>
+      </Container>
     </div>
   );
 };
