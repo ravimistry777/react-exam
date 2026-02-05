@@ -65,22 +65,33 @@ const Navbar = () => {
           
           <div className="d-flex align-items-center mt-3 mt-lg-0 pb-3 pb-lg-0">
             {isAuthenticated ? (
-              <Dropdown align="end">
-                <Dropdown.Toggle variant="transparent" className="d-flex align-items-center gap-2 border-0 p-0 shadow-none text-dark">
-                  <span className="fw-medium small text-uppercase letter-spacing-1">{user?.email?.split('@')[0]}</span>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu className="shadow-lg border-0 mt-3 rounded-0 p-0" style={{ minWidth: '200px' }}>
-                  <div className="px-4 py-3 border-bottom bg-light">
+              <>
+                <div className="d-lg-none w-100">
+                  <div className="px-3 py-2 bg-light mb-2">
                     <div className="small text-muted text-uppercase letter-spacing-1" style={{ fontSize: '0.7rem' }}>Signed in as</div>
                     <div className="fw-medium text-truncate">{user?.email}</div>
                   </div>
-                  <Dropdown.Item as={Link} to="/reservations" className="py-2 px-4 small text-uppercase letter-spacing-1" onClick={handleNavClick}>Dashboard</Dropdown.Item>
-                  <Dropdown.Item onClick={handleLogout} className="text-danger py-2 px-4 small text-uppercase letter-spacing-1">
-                    Logout
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                  <Link to="/reservations" className="d-block py-2 text-decoration-none text-dark small text-uppercase letter-spacing-1" onClick={handleNavClick}>Dashboard</Link>
+                  <div onClick={handleLogout} className="d-block py-2 text-danger small text-uppercase letter-spacing-1 cursor-pointer" role="button">Logout</div>
+                </div>
+
+                <Dropdown align="end" className="d-none d-lg-block">
+                  <Dropdown.Toggle variant="transparent" className="d-flex align-items-center gap-2 border-0 p-0 shadow-none text-dark">
+                    <span className="fw-medium small text-uppercase letter-spacing-1">{user?.email?.split('@')[0]}</span>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="shadow-lg border-0 mt-3 rounded-0 p-0" style={{ minWidth: '200px' }}>
+                    <div className="px-4 py-3 border-bottom bg-light">
+                      <div className="small text-muted text-uppercase letter-spacing-1" style={{ fontSize: '0.7rem' }}>Signed in as</div>
+                      <div className="fw-medium text-truncate">{user?.email}</div>
+                    </div>
+                    <Dropdown.Item as={Link} to="/reservations" className="py-2 px-4 small text-uppercase letter-spacing-1" onClick={handleNavClick}>Dashboard</Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout} className="text-danger py-2 px-4 small text-uppercase letter-spacing-1">
+                      Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </>
             ) : (
               <div className="d-flex gap-3">
                 <Link 
